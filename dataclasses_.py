@@ -350,30 +350,26 @@ class EmployeeManagement:
     def get_employees_in_age_range(
         self, min_age: int, max_age: int
     ) -> List["Employee"]:
-        filtered_employees = []
         all_employees = EmployeeManagement.get_all_employees(self)
-        for employee in all_employees:
-            if min_age <= employee.age <= max_age:
-                filtered_employees.append(employee)
+        filtered_employees = list(
+            filter(lambda employee: min_age <= employee.age <= max_age, all_employees)
+        )
         return filtered_employees
 
     def sort_employees_by_salary(self) -> List["Employee"]:
-        sorted_employees_by_salary = []
         all_employees = EmployeeManagement.get_all_employees(self)
-        for employee in all_employees:
-            sorted_employees_by_salary.append(employee)
+        sorted_employees_by_salary = [employee for employee in all_employees]
         return sorted(sorted_employees_by_salary, key=lambda d: d.salary, reverse=True)
 
     def filter_employees_by_department(
         self, department_name: "Department"
     ) -> List["Employee"]:
-        filtered_employees_by_department = []
         all_employees = EmployeeManagement.get_all_employees(self)
-        for employee in all_employees:
-            # print(employee)
-            # print(department_name)
-            if employee.department == department_name:
-                filtered_employees_by_department.append(employee)
+        filtered_employees_by_department = list(
+            filter(
+                lambda employee: employee.department == department_name, all_employees
+            )
+        )
         return filtered_employees_by_department
 
 
@@ -409,8 +405,63 @@ financial_department = Department(
 
 management = EmployeeManagement(departments=[sales_department, financial_department])
 
+print(sales_department.average_salary())
+print(management.total_salary())
+print(sales_department.employees)
+print(management.get_employees_in_age_range(min_age=21, max_age=99))
+print(management.sort_employees_by_salary())
+print(management.filter_employees_by_department("Sales department"))
 
-# print(management.total_salary())
-# print(sales_department.employees)
-# print(management.sort_employees_by_salary())
-print(management.filter_employees_by_department("Finances department"))
+
+# from dataclasses import dataclass
+
+
+# def get_default_age(gender: int) -> int:
+#     return 0 if gender == "male" else 1
+
+
+# def get_default_gender():
+#     return "female"
+
+
+# @dataclass
+# class Person:
+#     name: str
+#     # age: int = field(default_factory=lambda title: get_default_age(title))
+#     gender: str = field(default_factory=get_default_gender)
+
+
+# p1 = Person(name="John", title="male")
+# print(p1)  # Person(name='John', age=18, gender='male')
+
+# p2 = Person("Jane", 25, "female")
+# print(p2)  # Person(name='Jane', age=25, gender='female')
+
+# from dataclasses import dataclass
+
+
+# @dataclass(frozen=True)
+# class Person:
+#     name: str
+#     age: int
+
+
+# jonas = Person(name="Jonas", age=21)
+# jonas.name = "Vytautas"
+# print(jonas.name)
+
+
+# @dataclass
+# class Person:
+#     name: str
+#     age: int
+
+
+# @dataclass
+# class Employee(Person):
+#     id: str
+#     department: str
+
+
+# empl = Employee(name="John", age=30, id="1234", department="Sales")
+# print(empl)
